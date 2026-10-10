@@ -3,7 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>16课AI图文课程 · 互动阅览 v7 · 故事版</title>
+<title>16课AI图文课程 · 互动阅览 v7.1 · 故事版</title>
+<meta name="course-version" content="v7.1">
 <style>
 :root{
   --bg:#070B14;
@@ -1032,6 +1033,42 @@ body:not(.light) .lc7 .lmini{filter:saturate(.9) brightness(.95)}
   *,*::before,*::after{animation-duration:.001s!important;animation-iteration-count:1!important;transition-duration:.001s!important;transition-delay:0s!important}
   .rv{opacity:1!important;transform:none!important}
 }
+/* ================= v7.1 修复 ================= */
+/* 1) 阅读条不再挡字：往下读时收起成顶部 3px 进度线；跳转/锚点留出空间 */
+html{scroll-padding-top:84px}
+#content section.blk{scroll-margin-top:84px}
+#rd7.show.tuck .rdin{opacity:0;transform:translateY(-130%) scale(.96);pointer-events:none}
+#rd71l{position:fixed;left:0;right:0;top:0;height:3px;z-index:61;pointer-events:none;opacity:0;transition:opacity .3s}
+#rd71l.on{opacity:1}
+#rd71l i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--sc,#3654D6),var(--sca,#F2B33D));box-shadow:0 0 8px color-mix(in srgb,var(--sc,#3654D6) 60%,transparent)}
+/* 2) 手机版 AI 简史：按年份竖排 + 泳道筛选，不用左右滑 */
+.tlm,.mb71{display:none}
+@media(max-width:640px){
+  .tlv,#tlplay,#tld,.dk71{display:none!important}
+  .mb71{display:inline!important}
+  .tlw{padding:16px 0 12px}
+  .tlh{padding:0 16px}
+  .tlyr{font-size:30px}
+  .tlf{padding:10px 14px 6px;gap:5px}
+  .tlf button{font-size:11.5px;padding:4px 9px}
+  .tlm{display:block;padding:4px 14px 2px}
+  .tlmy{display:grid;grid-template-columns:40px minmax(0,1fr);gap:6px;padding:6px 0;border-top:1px dashed rgba(255,255,255,.1)}
+  .tlmy.hid{display:none}
+  .tlmyr{font-family:var(--serif);font-size:14px;font-weight:900;color:#AEB6DE;line-height:26px;font-variant-numeric:tabular-nums}
+  .tlmyr small{display:block;font-size:10px;line-height:1;opacity:.7;margin-top:-3px}
+  .tlmy.now .tlmyr{color:#FF8A5B;font-size:13px}
+  .tlmnow{font-size:12px;color:#FF8A5B;line-height:26px}
+  .tlmps{display:flex;flex-wrap:wrap;gap:5px}
+  .tlmp{display:inline-flex;align-items:center;gap:5px;height:26px;max-width:100%;padding:0 9px 0 7px;border-radius:14px;border:1px solid color-mix(in srgb,var(--c) 50%,transparent);
+    background:color-mix(in srgb,var(--c) 16%,rgba(255,255,255,.03));color:#fff;font:inherit;font-size:12px;font-weight:700;cursor:pointer;transition:background .25s,box-shadow .25s}
+  .tlmp span{overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+  .tlmp i{width:7px;height:7px;border-radius:50%;background:var(--c);flex:none}
+  .tlmp.sel{background:var(--c);box-shadow:0 0 0 3px color-mix(in srgb,var(--c) 30%,transparent)}
+  .tlmp.hid{display:none}
+  .tlmd{display:none}
+  .tlmd.open{display:block;margin-top:8px;padding:10px 12px;border-radius:12px;background:rgba(255,255,255,.06);border:1px solid color-mix(in srgb,var(--c) 40%,transparent);font-size:13px;line-height:1.7;color:#D5DAF5;animation:pop7 .45s var(--spring)}
+  .tlmd b{display:block;font-family:var(--serif);font-size:16px;color:#fff;margin:2px 0}
+}
 </style>
 </head>
 <body class="light">
@@ -1039,7 +1076,7 @@ body:not(.light) .lc7 .lmini{filter:saturate(.9) brightness(.95)}
 <div id="app">
   <nav id="side">
     <h1>16课AI图文课程</h1>
-    <div class="sub">故事版 v7 · 进度自动记忆 · <span id="doneCount"></span><br><button class="themebtn" id="themeBtn" onclick="toggleTheme()">🌙 切换到夜间</button></div>
+    <div class="sub">故事版 v7.1 · 进度自动记忆 · <span id="doneCount"></span><br><button class="themebtn" id="themeBtn" onclick="toggleTheme()">🌙 切换到夜间</button></div>
     <div id="navList"></div>
   </nav>
   <div id="main">
@@ -2224,7 +2261,7 @@ function nnField(cv){
     pulses=pulses.filter(q=>q.p<=1); for(const q of pulses){q.p+=.025;const x=q.a.x+(q.b.x-q.a.x)*q.p,y=q.a.y+(q.b.y-q.a.y)*q.p;const gr=g.createRadialGradient(x,y,0,x,y,9);gr.addColorStop(0,'rgba(255,214,140,.95)');gr.addColorStop(1,'rgba(255,214,140,0)');g.fillStyle=gr;g.beginPath();g.arc(x,y,9,0,7);g.fill()}
     g.font='600 12px '+getComputedStyle(document.body).fontFamily; g.textAlign='center'; g.textBaseline='middle';
     const tx0=Wd>760?Wd*.5:0, tx1=Wd>760?Wd*.64:0;
-    for(const p of N){ if(p.t){const tw=g.measureText(p.t).width+16, zone=Wd>760?Math.min(1,Math.max(.12,(p.x-tx0)/(tx1-tx0))):.3, a=(.55+.25*Math.sin(t/900+p.ph))*zone; g.fillStyle='rgba(255,255,255,'+(0.07*a+.03).toFixed(3)+')'; g.strokeStyle='rgba(170,190,255,'+(0.35*a).toFixed(3)+')';
+    for(const p of N){ if(p.t&&Wd>760){const tw=g.measureText(p.t).width+16, zone=Wd>760?Math.min(1,Math.max(.12,(p.x-tx0)/(tx1-tx0))):.3, a=(.55+.25*Math.sin(t/900+p.ph))*zone; g.fillStyle='rgba(255,255,255,'+(0.07*a+.03).toFixed(3)+')'; g.strokeStyle='rgba(170,190,255,'+(0.35*a).toFixed(3)+')';
         g.beginPath(); g.roundRect?g.roundRect(p.x-tw/2,p.y-11,tw,22,11):g.rect(p.x-tw/2,p.y-11,tw,22); g.fill(); g.stroke(); g.fillStyle='rgba(225,232,255,'+(0.75*a+.1).toFixed(3)+')'; g.fillText(p.t,p.x,p.y+.5)}
       else{g.fillStyle='rgba(190,205,255,.85)';g.beginPath();g.arc(p.x,p.y,p.r,0,7);g.fill()} }
     if(!RM&&vis&&!document.hidden)raf=requestAnimationFrame(frame);
@@ -2310,6 +2347,58 @@ function scrollySetup(){
 /* 讲义 / 练习页：关掉阅读条 */
 const _goLesson6=goLesson; goLesson=function(id,p){_goLesson6(id,p);const r=$('#rd7');if(r)r.classList.remove('on','show')};
 const _goEx6=goExercise; goExercise=function(id){_goEx6(id);const r=$('#rd7');if(r)r.classList.remove('on','show')};
+
+/* ================= v7.1 修复 ================= */
+/* 1) 阅读条：往下读时收起（只留顶部进度线），往上滑或鼠标移到顶部再出现 */
+(function(){const l=document.createElement('div');l.id='rd71l';l.setAttribute('aria-hidden','true');l.innerHTML='<i></i>';document.body.appendChild(l)})();
+let RD71_Y=0, RD71_HOT=false;
+const _rdUpdate7=rdUpdate;
+rdUpdate=function(){
+  _rdUpdate7();
+  const rd=$('#rd7'), ln=$('#rd71l'); if(!rd||!ln)return;
+  const y=scrollY, dy=y-RD71_Y;
+  if(Math.abs(dy)>6){ if(dy>0&&!RD71_HOT)rd.classList.add('tuck'); else if(dy<0)rd.classList.remove('tuck'); RD71_Y=y; }
+  if(RD71_HOT)rd.classList.remove('tuck');
+  ln.style.setProperty('--sc',rd.style.getPropertyValue('--sc'));
+  ln.classList.toggle('on',rd.classList.contains('on')&&rd.classList.contains('show')&&rd.classList.contains('tuck'));
+  const p=$('#rd7p'); if(p)ln.firstChild.style.width=p.style.width;
+};
+window.addEventListener('pointermove',e=>{if(e.pointerType!=='mouse')return;const h=e.clientY<70;if(h!==RD71_HOT){RD71_HOT=h;rdUpdate()}},{passive:true});
+rdJump=function(i){const b=document.querySelectorAll('#content section.blk')[i];if(b)window.scrollTo({top:b.getBoundingClientRect().top+scrollY-84,behavior:RM?'auto':'smooth'})};
+/* 2) 手机版 AI 简史：按年份竖排的紧凑列表（桌面版时间轴不变） */
+const _histHtml7=histHtml;
+histHtml=function(){
+  const ys={}; HI.forEach((it,i)=>{const k=it[1]<=2021?2021:it[1];(ys[k]=ys[k]||[]).push(i)}); // 2014—2021 合成一行，手机上更紧凑
+  let m='<div class="tlm" id="tlm">';
+  Object.keys(ys).sort().forEach(y=>{
+    m+='<div class="tlmy" data-y="'+y+'"><b class="tlmyr">'+(y==='2021'?'2014<small>—2021</small>':y)+'</b><div class="tlmr"><div class="tlmps">'
+      +ys[y].map(i=>{const it=HI[i],l=HL.find(z=>z.k===it[0]);return '<button class="tlmp" data-k="'+it[0]+'" data-i="'+i+'" style="--c:'+l.c+'" onclick="histPickM('+i+')"><i></i><span>'+esc(it[3])+'</span></button>'}).join('')
+      +'</div><div class="tlmd"></div></div></div>';
+  });
+  m+='<div class="tlmy now"><b class="tlmyr">今天</b><div class="tlmr"><span class="tlmnow">2026 年 10 月 · 还在继续往前跑</span></div></div></div>';
+  return _histHtml7()
+    .replace('<span>拖动或滑动时间轴 · 点任意一项看说明</span>','<span class="dk71">拖动或滑动时间轴 · 点任意一项看说明</span><span class="mb71">按年份往下看 · 点任意一项看说明</span>')
+    .replace('<div class="tlv" id="tlv">',m+'<div class="tlv" id="tlv">');
+};
+function histPickM(i){
+  const it=HI[i], l=HL.find(z=>z.k===it[0]), btn=document.querySelector('.tlmp[data-i="'+i+'"]'); if(!btn)return;
+  const was=btn.classList.contains('sel');
+  document.querySelectorAll('.tlmp.sel').forEach(b=>b.classList.remove('sel'));
+  document.querySelectorAll('.tlmd').forEach(d=>{d.innerHTML='';d.classList.remove('open')});
+  if(was)return;
+  btn.classList.add('sel');
+  const d=btn.closest('.tlmy').querySelector('.tlmd'); d.style.setProperty('--c',l.c);
+  d.innerHTML='<span class="tldh"><i></i>'+l.n+' · '+it[1]+(it[2]?' 年 '+it[2]+' 月':' 年')+'</span><b>'+esc(it[3])+'</b>'+esc(it[4]);
+  d.classList.add('open');
+  histPick(i);
+}
+const _histLane7=histLane;
+histLane=function(btn,k){
+  _histLane7(btn,k);
+  document.querySelectorAll('.tlmp').forEach(b=>b.classList.toggle('hid',!!k&&b.dataset.k!==k));
+  document.querySelectorAll('.tlmy[data-y]').forEach(y=>y.classList.toggle('hid',!y.querySelector('.tlmp:not(.hid)')));
+  const s=document.querySelector('.tlmp.sel.hid'); if(s)histPickM(+s.dataset.i);
+};
 
 renderHome();
 </script>
